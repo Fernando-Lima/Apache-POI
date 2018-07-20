@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width" />
+
+<title>Inova</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+<body>
+	<div class="container-fluid center">
+
+		<form method="POST" action="/tinsul/upload"
+			enctype="multipart/form-data">
+			<div class="form">
+				<div class="form-group">
+					<label for="exampleInputFile">Selecionar arquivo</label> <input
+						type="file" class="form-control-file" id="exampleInputFile"
+						aria-describedby="fileHelp" name="file"> <small
+						id="fileHelp" class="form-text text-muted">Selecione um
+						arquivo excel .xls para verções do office até 2003</small>
+				</div>
+<!-- 				<fieldset class="form-group" name="tipoLigacao"> -->
+<!-- 					<legend>Tipos de ligações</legend> -->
+<!-- 					<div class="form-check"> -->
+<!-- 						<label class="form-check-label"> <input type="radio" -->
+<!-- 							class="form-check-input" name="tipoLigacao" id="optionsRadios1" -->
+<!-- 							value="EFETUADAS" checked> Ligações efetuadas -->
+<!-- 						</label> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-check"> -->
+<!-- 						<label class="form-check-label"> <input type="radio" -->
+<!-- 							class="form-check-input" name="tipoLigacao" id="optionsRadios2" -->
+<!-- 							value="RECEBIDAS"> Ligações recebidas -->
+<!-- 						</label> -->
+<!-- 					</div> -->
+					
+<!-- 				</fieldset> -->
+				<button type="submit" class="btn btn-primary" value="Submit">Enviar</button>
+<!-- 				<a href="/tinsul/calcular"> -->
+<!-- 					<button type="button" class="btn btn-primary">Calcular</button> -->
+<!-- 				</a> -->
+
+			</div>
+		</form>
+		<div th:if="${message}">
+			<div class="alert alert-primary" role="alert">
+				<span th:text="${message}"></span>
+			</div>
+		</div>
+
+	</div>
+
+	<script th:src="@{/js/jquery-3.3.1.slim.min.js}"></script>
+	<script src="http://code.jquery.com/jquery-latest.min.js"
+		type="text/javascript"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+	<script th:src="@{/js/efects.js}"></script>
+	<script th:src="@{/js/validator.min.js}"></script>
+
+
+</body>
+</html>
