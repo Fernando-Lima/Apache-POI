@@ -109,7 +109,7 @@ public class ApachePOIController {
 								}
 							
 							case 2:
-								if (pessoa.getTipoLigacao().equals(TipoLicacao.RECEBIDA) && cell.getNumericCellValue() < 43) {
+								if (pessoa.getTipoLigacao().equals(TipoLicacao.RECEBIDA) && cell.getNumericCellValue() <= 43) {
 									pessoa.setRamal(cell.getNumericCellValue());
 								}
 								break;
