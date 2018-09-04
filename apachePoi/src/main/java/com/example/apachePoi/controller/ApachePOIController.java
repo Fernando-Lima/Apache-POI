@@ -30,11 +30,30 @@ import com.example.apachePoi.repository.ApachePOIRepository;
 @Controller
 @RequestMapping("/apachePoi")
 public class ApachePOIController {
-	
+
+	/*
+	 * TODO Para pegar o tipo String ou Numérico de um celula utiliza-se o metodo
+	 * getCellType se retornar 0 = Numérico e se retornar 1 = String
+	 */
+
+	/*
+	 * TODO Script SQL para calcular o tempo de ligações
+	 * 
+	 * select pessoa.ramal as 'Ramal',
+	 * DATE_FORMAT(SEC_TO_TIME(SUM(chamadas_recebidas)), '%H:%i:%s') as 'Chamadas de
+	 * entrada', DATE_FORMAT(SEC_TO_TIME(SUM(chamadas_efetuadas)), '%H:%i:%s') as
+	 * 'Chamadas de saida' from pessoa where pessoa.ramal is not null group by
+	 * pessoa.ramal;
+	 * 
+	 */
+
+	// System.out.println("Linha >> " + row.getRowNum() + "| Coluna >> " +
+	// cell.getColumnIndex() + "Tipo >> " + cell.getCellType());
+
 	private static String UPLOADED_FOLDER = "/home/fernando/ApachePOI/";
 
 	private static Path path;
-	
+
 	@Autowired
 	ApachePOIRepository repository;
 
@@ -42,15 +61,16 @@ public class ApachePOIController {
 	public String index() {
 		return "index";
 	}
-	
+
+	//Metodo para fazer o upload do arquivo, deve ser formato xml
 	@PostMapping
-	public String singleFileUpload(@RequestParam("file")MultipartFile file, RedirectAttributes redirectAttributes) {
-		
+	public String singleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+
 		if (file.isEmpty()) {
 			redirectAttributes.addFlashAttribute("message", "Por favor selecione um arquivo");
 			return "redirect:/apachePoi";
 		}
-		
+
 		try {
 			// Pega o arquivo e salva em algum lugar
 			byte[] bytes = file.getBytes();
@@ -58,14 +78,16 @@ public class ApachePOIController {
 			Files.write(path, bytes);
 			redirectAttributes.addFlashAttribute("message",
 					"Arquivo  enviado com sucesso'" + file.getOriginalFilename() + "'");
-			
+
 			salvar(redirectAttributes);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "redirect:/apachePoi";
 	}
-	
+
+	//Metodo para salvar os dados no Banco de dados, pega as informações das colunas 1,2,12 e 19
+	//Tanto a coluna quanto linha começa em 0 "Zero".
 	public String salvar(RedirectAttributes attributes) throws IOException {
 		List<Pessoa> listaPessoas = new ArrayList<Pessoa>();
 
@@ -79,44 +101,47 @@ public class ApachePOIController {
 			Iterator<Row> rowIterator = sheetAlunos.iterator();
 
 			while (rowIterator.hasNext()) {
-				
+
 				Row row = rowIterator.next();
-				if (row.getRowNum() != 0) {
+				if (row.getRowNum() != 0) { // pula a primeira linha (Cabeçalho da tabela)
 					Iterator<Cell> cellIterator = row.cellIterator();
 
 					Pessoa pessoa = new Pessoa();
 					pessoa.setTipoLigacao(TipoLicacao.EFETUADA);
-					
+
 					while (cellIterator.hasNext()) {
 						Cell cell = cellIterator.next();
 						listaPessoas.add(pessoa);
-						
-						if(cell.getColumnIndex() == 1 && cell.getCellType() == 1) {
+
+						listaPessoas.add(pessoa);
+
+						if (cell.getColumnIndex() == 1 && cell.getCellType() == 1) {
 							rowIterator.next();
 							break;
-						}else {
-							listaPessoas.add(pessoa);
+						} else {
 							switch (cell.getColumnIndex()) {
-							
+
 							case 1:
-								if(cell.getNumericCellValue()>43) {
-									//camada de entrada
+								if (cell.getNumericCellValue() < 20 || cell.getNumericCellValue() > 43) {
 									pessoa.setTipoLigacao(TipoLicacao.RECEBIDA);
 									break;
-								}else {
+								} else {
 									pessoa.setRamal(cell.getNumericCellValue());
 									break;
 								}
-							
 							case 2:
-								if (pessoa.getTipoLigacao().equals(TipoLicacao.RECEBIDA) && cell.getNumericCellValue() <= 43) {
-									pessoa.setRamal(cell.getNumericCellValue());
+								if (cell.getCellType() != 1) {
+									if (pessoa.getTipoLigacao().equals(TipoLicacao.RECEBIDA)) {
+										if (cell.getNumericCellValue() >= 20 && cell.getNumericCellValue() <= 43) {
+											pessoa.setRamal(cell.getNumericCellValue());
+										}
+									}
 								}
 								break;
 							case 12:
-								if(pessoa.getTipoLigacao().equals(TipoLicacao.RECEBIDA)) {
+								if (pessoa.getTipoLigacao().equals(TipoLicacao.RECEBIDA)) {
 									pessoa.setChamadasRecebidas(cell.getNumericCellValue());
-								}else {
+								} else {
 									pessoa.setChamadasEfetuadas(cell.getNumericCellValue());
 								}
 								break;
@@ -150,5 +175,4 @@ public class ApachePOIController {
 		}
 		return "redirect:/tinsul";
 	}
-	
 }
