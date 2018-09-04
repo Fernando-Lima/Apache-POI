@@ -1,9 +1,9 @@
-$(document).ready(function() {
-    // show the alert
-    setTimeout(function() {
-        $(".alert").alert('close');
-    }, 5000);
-});
+//$(document).ready(function() {
+//    // show the alert
+//    setTimeout(function() {
+//        $(".alert").alert('close');
+//    }, 5000);
+//});
 
 $('#confirmacaoExclusaoModal').on('show.bs.modal', function(event){
 	var button = $(event.relatedTarget);
