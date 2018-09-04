@@ -53,6 +53,7 @@ public class ApachePOIController {
 	private static String UPLOADED_FOLDER = "/home/fernando/ApachePOI/";
 
 	private static Path path;
+	private String mensagem = "Erro ao salvar arquivo";
 
 	@Autowired
 	ApachePOIRepository repository;
@@ -76,10 +77,16 @@ public class ApachePOIController {
 			byte[] bytes = file.getBytes();
 			path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
 			Files.write(path, bytes);
-			redirectAttributes.addFlashAttribute("message",
-					"Arquivo "+ file.getOriginalFilename() + " enviado com sucesso! ");
-
-			salvar(redirectAttributes);
+			
+			try {
+				salvar();
+				redirectAttributes.addFlashAttribute("messageOk", mensagem);
+			} catch (Exception e) {
+				e.printStackTrace();
+				redirectAttributes.addFlashAttribute("message", mensagem);
+			}
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -88,7 +95,7 @@ public class ApachePOIController {
 
 	//Metodo para salvar os dados no Banco de dados, pega as informações das colunas 1,2,12 e 19
 	//Tanto a coluna quanto linha começa em 0 "Zero".
-	public String salvar(RedirectAttributes attributes) throws IOException {
+	public String salvar() throws IOException {
 		List<Pessoa> listaPessoas = new ArrayList<Pessoa>();
 
 		try {
@@ -153,17 +160,17 @@ public class ApachePOIController {
 					}
 				}
 			}
+			
+			mensagem = "Arquivo enviado com sucesso! ";
 			arquivo.close();
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			attributes.addFlashAttribute("message", "Arquivo Excel não encontrado!");
-			System.out.println("Arquivo Excel não encontrado!");
+			mensagem = "Arquivo Excel não encontrado!";
 		}
 
 		if (listaPessoas.size() == 0) {
-			attributes.addFlashAttribute("message", "Nenhuma Pessoa encontrada!");
-			System.out.println("Nenhuma Pessoa encontrada!");
+			mensagem = "Nenhuma Pessoa encontrada!";
 		} else {
 			try {
 				repository.saveAll(listaPessoas);
@@ -173,6 +180,6 @@ public class ApachePOIController {
 			}
 
 		}
-		return "redirect:/tinsul";
+		return mensagem;
 	}
 }
