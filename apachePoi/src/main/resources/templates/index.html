@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width" />
 
-<title>Inova</title>
+<title>ApachePOI</title>
 <link rel="stylesheet" type="text/css"
 	th:href="@{/css/bootstrap.min.css}" />
 <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
@@ -37,6 +37,7 @@
 				</div>
 				<button type="submit" id="load" class="btn btn-primary"
 					value="Submit">Enviar</button>
+				<a th:href="@{/apachePoi/calcular}"><button class="btn btn-outline-danger my-2 my-sm-0" type="button" >Calcular</button></a>	
 			</div>
 		</form>
 		<div th:if="${message}">

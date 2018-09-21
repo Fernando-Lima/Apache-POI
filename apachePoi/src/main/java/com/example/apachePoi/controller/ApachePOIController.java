@@ -24,12 +24,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.apachePoi.model.Pessoa;
+import com.example.apachePoi.model.Resposta;
 import com.example.apachePoi.model.TipoLicacao;
 import com.example.apachePoi.repository.ApachePOIRepository;
 
 @Controller
 @RequestMapping("/apachePoi")
-public class ApachePOIController {
+public class ApachePOIController{
 
 	/*
 	 * TODO Para pegar o tipo String ou Numérico de um celula utiliza-se o metodo
@@ -54,9 +55,10 @@ public class ApachePOIController {
 
 	private static Path path;
 	private String mensagem = "Erro ao salvar arquivo";
-
+	
 	@Autowired
 	ApachePOIRepository repository;
+	
 
 	@RequestMapping
 	public String index() {
@@ -181,5 +183,17 @@ public class ApachePOIController {
 
 		}
 		return mensagem;
+	}
+	
+	
+	public Resposta calcular() {
+		Resposta resposta = repository.findByRamal();
+		System.out.println(resposta.getRamal().toString());
+		return resposta;
+	}
+	@RequestMapping("/calcular")
+	public String calc() {
+		calcular();
+		return "index";
 	}
 }
