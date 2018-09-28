@@ -186,14 +186,18 @@ public class ApachePOIController{
 	}
 	
 	
-	public Resposta calcular() {
-		Resposta resposta = repository.findByRamal();
-		System.out.println(resposta.getRamal().toString());
+	public Resposta buscarCalculo() {
+		List<Resposta> respostas = repository.findByRamal();
+		Resposta resposta = null;
+		for(int i = 0; i< respostas.size(); i++) {
+			resposta = respostas.get(i);
+			System.out.println("Ramal = " + resposta.getRamal().toString() + " Chamadas de Entrada = "+ resposta.getChamadasDeEntrada() + " Chamadas de saída " + resposta.getChamadasDeSaida());
+		}
 		return resposta;
 	}
 	@RequestMapping("/calcular")
 	public String calc() {
-		calcular();
+		buscarCalculo();
 		return "index";
 	}
 }
