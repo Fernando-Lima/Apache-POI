@@ -41,9 +41,9 @@ public class ApachePOIController{
 	 * TODO Script SQL para calcular o tempo de ligações
 	 * 
 	 * select pessoa.ramal as 'Ramal',
-	 * DATE_FORMAT(SEC_TO_TIME(SUM(chamadas_recebidas)), '%H:%i:%s') as 'Chamadas de
-	 * entrada', DATE_FORMAT(SEC_TO_TIME(SUM(chamadas_efetuadas)), '%H:%i:%s') as
-	 * 'Chamadas de saida' from pessoa where pessoa.ramal is not null group by
+	 * DATE_FORMAT(SEC_TO_TIME(SUM(pessoa.chamadas_recebidas)), '%H:%i:%s') as 'ChamadasDeEntrada', 
+	 * DATE_FORMAT(SEC_TO_TIME(SUM(pessoa.chamadas_efetuadas)), '%H:%i:%s') as
+	 * 'ChamadasDeSaida' from pessoa where pessoa.ramal is not null group by
 	 * pessoa.ramal;
 	 * 
 	 */
@@ -130,7 +130,7 @@ public class ApachePOIController{
 						} else {
 							switch (cell.getColumnIndex()) {
 
-							case 1:
+							case 1: 
 								if (cell.getNumericCellValue() < 20 || cell.getNumericCellValue() > 43) {
 									pessoa.setTipoLigacao(TipoLicacao.RECEBIDA);
 									break;
@@ -150,8 +150,10 @@ public class ApachePOIController{
 							case 12:
 								if (pessoa.getTipoLigacao().equals(TipoLicacao.RECEBIDA)) {
 									pessoa.setChamadasRecebidas(cell.getNumericCellValue());
+									pessoa.setChamadasEfetuadas(0.0);
 								} else {
 									pessoa.setChamadasEfetuadas(cell.getNumericCellValue());
+									pessoa.setChamadasRecebidas(0.0);
 								}
 								break;
 							case 19:
@@ -191,7 +193,7 @@ public class ApachePOIController{
 		Resposta resposta = null;
 		for(int i = 0; i< respostas.size(); i++) {
 			resposta = respostas.get(i);
-			System.out.println("Ramal = " + resposta.getRamal().toString() + " Chamadas de Entrada = "+ resposta.getChamadasDeEntrada() + " Chamadas de saída " + resposta.getChamadasDeSaida());
+			System.out.println("Ramal = " + resposta.getRamal().toString() + " Chamadas de Entrada = "+ resposta.getChamadasDeEntrada() + " Chamadas de saída =" + resposta.getChamadasDeSaida());
 		}
 		return resposta;
 	}
