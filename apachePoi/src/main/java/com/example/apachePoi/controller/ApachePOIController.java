@@ -136,14 +136,14 @@ public class ApachePOIController{
 									pessoa.setTipoLigacao(TipoLicacao.RECEBIDA);
 									break;
 								} else {
-									pessoa.setRamal(cell.getNumericCellValue());
+									pessoa.setRamal(Integer.valueOf((int) cell.getNumericCellValue()));
 									break;
 								}
 							case 2:
 								if (cell.getCellType() != 1) {
 									if (pessoa.getTipoLigacao().equals(TipoLicacao.RECEBIDA)) {
 										if (cell.getNumericCellValue() >= 20 && cell.getNumericCellValue() <= 43) {
-											pessoa.setRamal(cell.getNumericCellValue());
+											pessoa.setRamal(Integer.valueOf((int) cell.getNumericCellValue()));
 										}
 									}
 								}

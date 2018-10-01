@@ -14,7 +14,7 @@ public class Pessoa {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long codigo;
 	private String nome;
-	private Double ramal;
+	private Integer ramal;
 	private Double chamadasEfetuadas;
 	private Double chamadasRecebidas;
 	@Enumerated(EnumType.STRING)
@@ -58,10 +58,10 @@ public class Pessoa {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Double getRamal() {
+	public Integer getRamal() {
 		return ramal;
 	}
-	public void setRamal(Double ramal) {
+	public void setRamal(Integer ramal) {
 		this.ramal = ramal;
 	}
 	public TipoLicacao getTipoLigacao() {
@@ -71,7 +71,7 @@ public class Pessoa {
 		this.tipoLigacao = tipoLigacao;
 	}
 	
-	public Pessoa(Long codigo, String nome, Double ramal, Double chamadasEfetuadas, Double chamadasRecebidas,
+	public Pessoa(Long codigo, String nome, Integer ramal, Double chamadasEfetuadas, Double chamadasRecebidas,
 			TipoLicacao tipoLigacao) {
 		super();
 		this.codigo = codigo;

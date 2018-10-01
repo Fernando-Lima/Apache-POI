@@ -3,7 +3,7 @@ package com.example.apachePoi.model;
 
 public interface Resposta {
 	
-	Double getRamal();
+	Integer getRamal();
 	String getChamadasDeEntrada();
 	String getChamadasDeSaida();
 }
