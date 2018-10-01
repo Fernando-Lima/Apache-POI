@@ -35,27 +35,30 @@
 						type="file" class="form-control-file" id="exampleInputFile"
 						aria-describedby="fileHelp" name="file">
 				</div>
-				<button type="submit" id="load" class="btn btn-primary"
+				<button type="submit" id="load" class="btn btn-outline-primary"
 					value="Submit">Enviar</button>
-				<a th:href="@{/apachePoi/calcular}"><button class="btn btn-outline-danger my-2 my-sm-0" type="button" >Calcular</button></a>	
+				<a th:href="@{/apachePoi/calcular}"><button
+						class="btn btn-outline-primary my-2 my-sm-0" type="button">Calcular</button></a>
+				<a href="#"><button id="exportButton"
+						class="btn btn-outline-primary my-2 my-sm-0" type="button">Imprimir</button></a>
 			</div>
 		</form>
-		<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Ramal</th>
-      <th scope="col">Tempo de chamadas de entrada</th>
-      <th scope="col">Tempo de chamadas de saída</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr th:each="lista: ${calculo}">
-      <th scope="row" th:text="${lista.ramal}"></th>
-      <td th:text="${lista.chamadasDeEntrada}"></td>
-      <td th:text="${lista.chamadasDeSaida}"></td>
-    </tr>
-  </tbody>
-</table>
+		<table id="exportTable" class="table">
+			<thead>
+				<tr>
+					<th scope="col">Ramal</th>
+					<th scope="col">Entrada</th>
+					<th scope="col">Saida</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="lista: ${calculo}">
+					<td scope="row" th:text="${lista.ramal}"></td>
+					<td scope="row" th:text="${lista.chamadasDeEntrada}"></td>
+					<td scope="row" th:text="${lista.chamadasDeSaida}"></td>
+				</tr>
+			</tbody>
+		</table>
 		<div th:if="${message}">
 			<div class="alert alert-danger" role="alert">
 				<span th:text="${message}"></span>
@@ -78,6 +81,71 @@
 		crossorigin="anonymous"></script>
 	<script th:src="@{/js/efects.js}"></script>
 	<script th:src="@{/js/validator.min.js}"></script>
+
+	<link rel="stylesheet" type="text/css"
+		href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
+	<script type="text/javascript"
+		src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
+	<script type="text/javascript"
+		src="http://www.shieldui.com/shared/components/latest/js/jszip.min.js"></script>
+
+	<script type="text/javascript">
+		jQuery(function($) {
+			$("#exportButton").click(function() {
+				// parse the HTML table element having an id=exportTable
+				var dataSource = shield.DataSource.create({
+					data : "#exportTable",
+					schema : {
+						type : "table",
+						fields : {
+							Ramal : {
+								type : String
+							},
+							Entrada : {
+								type : String
+							},
+							Saida : {
+								type : String
+							}
+						}
+					}
+				});
+
+				// when parsing is done, export the data to PDF
+				dataSource.read().then(function(data) {
+					var pdf = new shield.exp.PDFDocument({
+						author : "PrepBootstrap",
+						created : new Date()
+					});
+
+					pdf.addPage("a4", "portrait");
+
+					pdf.table(50, 50, data, [ {
+						field : "Ramal",
+						title : "Ramal",
+						width : 40
+					}, {
+						field : "Entrada",
+						title : "Chamadas de entrada",
+						width : 200
+					}, {
+						field : "Saida",
+						title : "Chamadas de saída",
+						width : 200
+					} ], {
+						margins : {
+							top : 50,
+							left : 50
+						}
+					});
+
+					pdf.saveAs({
+						fileName : "Relatório de ligações"
+					});
+				});
+			});
+		});
+	</script>
 
 
 </body>
