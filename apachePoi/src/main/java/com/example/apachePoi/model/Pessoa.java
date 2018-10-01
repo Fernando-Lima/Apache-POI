@@ -19,8 +19,21 @@ public class Pessoa {
 	private Double chamadasRecebidas;
 	@Enumerated(EnumType.STRING)
 	private TipoLicacao tipoLigacao;
+	private String chamadasDeEntrada;
+	private String chamadasDeSaida;
 	
-	
+	public String getChamadasDeEntrada() {
+		return chamadasDeEntrada;
+	}
+	public void setChamadasDeEntrada(String chamadasDeEntrada) {
+		this.chamadasDeEntrada = chamadasDeEntrada;
+	}
+	public String getChamadasDeSaida() {
+		return chamadasDeSaida;
+	}
+	public void setChamadasDeSaida(String chamadasDeSaida) {
+		this.chamadasDeSaida = chamadasDeSaida;
+	}
 	public Double getChamadasEfetuadas() {
 		return chamadasEfetuadas;
 	}

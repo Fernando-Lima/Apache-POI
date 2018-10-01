@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.apachePoi.model.Pessoa;
@@ -187,19 +188,27 @@ public class ApachePOIController{
 		return mensagem;
 	}
 	
-	
-	public Resposta buscarCalculo() {
-		List<Resposta> respostas = repository.findByRamal();
-		Resposta resposta = null;
-		for(int i = 0; i< respostas.size(); i++) {
-			resposta = respostas.get(i);
-			System.out.println("Ramal = " + resposta.getRamal().toString() + " Chamadas de Entrada = "+ resposta.getChamadasDeEntrada() + " Chamadas de saída =" + resposta.getChamadasDeSaida());
-		}
-		return resposta;
-	}
 	@RequestMapping("/calcular")
-	public String calc() {
-		buscarCalculo();
-		return "index";
+	public ModelAndView buscarCalculo() {
+		ModelAndView mv;
+		try {
+			List<Resposta> respostas = repository.findByRamal();
+			Resposta resposta = null;
+			List<Pessoa> pessoas = new ArrayList<>();
+			for(int i = 0; i< respostas.size(); i++) {
+				resposta = respostas.get(i);
+				Pessoa pessoa = new Pessoa();
+				pessoa.setRamal(resposta.getRamal());
+				pessoa.setChamadasDeSaida(resposta.getChamadasDeSaida().toString());
+				pessoa.setChamadasDeEntrada(resposta.getChamadasDeEntrada().toString());
+				pessoas.add(pessoa);
+			}
+			mv = new ModelAndView("index");
+			mv.addObject("calculo", pessoas);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mv = new ModelAndView("index");
+		}
+		return mv;
 	}
 }

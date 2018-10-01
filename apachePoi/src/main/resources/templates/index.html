@@ -40,6 +40,22 @@
 				<a th:href="@{/apachePoi/calcular}"><button class="btn btn-outline-danger my-2 my-sm-0" type="button" >Calcular</button></a>	
 			</div>
 		</form>
+		<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Ramal</th>
+      <th scope="col">Tempo de chamadas de entrada</th>
+      <th scope="col">Tempo de chamadas de saída</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="lista: ${calculo}">
+      <th scope="row" th:text="${lista.ramal}"></th>
+      <td th:text="${lista.chamadasDeEntrada}"></td>
+      <td th:text="${lista.chamadasDeSaida}"></td>
+    </tr>
+  </tbody>
+</table>
 		<div th:if="${message}">
 			<div class="alert alert-danger" role="alert">
 				<span th:text="${message}"></span>
