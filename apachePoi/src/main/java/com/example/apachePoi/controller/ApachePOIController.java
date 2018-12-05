@@ -78,11 +78,7 @@ public class ApachePOIController{
 		try {
 			// Pega o arquivo e salva em algum lugar
 			byte[] bytes = file.getBytes();
-			/*Aqui irá pegar o arquivo e fazer uma cópia para outro diretório*/
-			//path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-			
-			/*Aqui irá pegar o arquivo selecionado sem fazer cópia para outro diretório*/
-			path = Paths.get(file.getOriginalFilename());
+			path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
 			Files.write(path, bytes);
 			
 			try {
